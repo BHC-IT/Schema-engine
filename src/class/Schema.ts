@@ -65,5 +65,29 @@ export class Schema<T extends object> {
 		return filtered_obj as T;
 	}
 
-	// public filter = (obj : {[index: string]: any}) : boolean =>
+	public createDefault = () : T => {
+		const invalid_default : string[] = [];
+		const created_obj : {[index: string]: any} = {};
+
+		this._keys.forEach((e) => {
+			if (this._schema[e].default !== undefined) {
+				created_obj
+				let value : any;
+				if (typeof this._schema[e].default === "function")
+					value = this._schema[e].default();
+				else
+					value = this._schema[e].default;
+				if (!matchType(value, this._schema[e].type))
+					invalid_default.push(e);
+				else
+					created_obj[e] = value;
+
+			}
+		});
+
+		if (invalid_default.length)
+			throw new TypeError(`key have an invalid default typing : ${invalid_default}`);
+
+		return created_obj as T;
+	}
 }
