@@ -304,4 +304,62 @@ describe('test Schema filter', function() {
 		expect(result).to.eql({test: 0, test2: '0'});
 	});
 
+	it('Schema filter with types 2', function() {
+
+		interface ITest {
+			test: number,
+			test2: number,
+		}
+
+		const schema = new Schema<ITest>({
+			test: {type : Number},
+		});
+
+		const test = {
+			test: 0,
+		};
+
+		const result : ITest = schema.filter(test);
+
+		expect(result).to.eql({test: 0});
+	});
+
+});
+
+describe('test Schema createDefault', function() {
+
+
+	it('Schema createDefault 1', function() {
+
+		const schema = new Schema({
+			test: {type : Number},
+			test2: {type : String},
+		});
+
+
+		expect(schema.createDefault()).to.eql({});
+	});
+
+	it('Schema createDefault 2', function() {
+
+		const schema = new Schema({
+			test: {type : Number, default: 0},
+			test2: {type : String, default: () => 'ok'},
+		});
+
+
+		expect(schema.createDefault()).to.eql({test: 0, test2: 'ok'});
+	});
+
+
+	it('Schema createDefault 3', function() {
+
+		const schema = new Schema({
+			test: {type : Number, default: 'ok'},
+			test2: {type : String, default: () => 0},
+		});
+
+		expect(schema.createDefault).to.throw(TypeError, "key have an invalid default typing : test,test2");
+	});
+
 });

@@ -3,7 +3,7 @@ name: SemVer release
 on:
   workflow_run:
     workflows: ["Node.js CI Tests"]
-    branches: [ master ]
+    branches: [ main ]
     types:
       - completed
 
